@@ -1,38 +1,20 @@
 <!-- Logic -->
 <script>
 	import FeedbackList from "./components/FeedbackList.svelte";
-
-export let feedbacks = [
-  {
-    id: 1,
-    rating: 10,
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.',
-  },
-  {
-    id: 2,
-    rating: 9,
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.',
-  },
-  {
-    id: 3,
-    rating: 8,
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.',
-  },
-];
-
-$: count = feedbacks.length;
+  import FeedbackForm from "./components/FeedbackForm.svelte";
+  import FeedbackStats from "./components/FeedbackStats.svelte";
+  import { feedbacks as FeedbackStore } from "./store";
 
 
-const handleDelete = (eventParam)=>{
-	let tempFBs = feedbacks.filter((fb)=>fb.id !== eventParam.detail);
-	feedbacks = tempFBs;
-}
+$: count = $FeedbackStore.length;
+$: average = $FeedbackStore.reduce((acc, curr) => acc + curr.rating, 0) / count;
 </script>
 
 <!-- Output -->
 <main class="container">
-	<h3>{count}</h3>
-	<FeedbackList {feedbacks} on:delete-fb={handleDelete}/>
+  <FeedbackForm />
+	<FeedbackStats {count} {average} />
+	<FeedbackList />
 </main>
 
 
